@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import useToken from './components/customHooks/useToken';
 
+import Contacts from "./components/Contacts";
 import Login from "./components/Login";
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/myapps" element={<Home2 />} />
+        <Route path="/contacts" element={<Contacts token={token}/>} />
 
         <Route path="/learn" element={<Learn />}/>
       </Routes>
@@ -35,6 +36,7 @@ function Home() {
   return (
     <div>
       <h1>Hello there, lets discover endpoints</h1>
+      <a href="/contacts">contactx</a>
     </div>
   );
 }
