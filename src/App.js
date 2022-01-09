@@ -41,13 +41,6 @@ function Home() {
   );
 }
 
-function Home2() {
-  return (
-    <div>
-      <h1>Hello there, lets discover asdsad</h1>
-    </div>
-  );
-}
 
 function Learn() {
   return (

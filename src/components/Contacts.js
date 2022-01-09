@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import axios from 'axios'
 
 function Contacts(props){
-const [contacts,setContacts] = useState('')
-const [contacId,setContactId] = useState('')
+const [contacts, setContacts] = useState('')
+const [status, setStatus] = useInput('')
 
-const handleClick = async() => {
+const handleGetData = async() => {
     const api = `http://localhost:4000/api/contacts`
     const data = await axios.get(api, { headers: {"Authorization" : `Bearer ${props.token}`} })
     setContacts(data)
@@ -17,23 +17,36 @@ const handleDelete = async(id) => {
         { headers: {"Authorization" : `Bearer ${props.token}`} })
     setContacts(data)
 }
-const handleCreate = async() => {
+
+// let handleChange = function(e) {
+//     console.log(e.target.value);
+//     this.setState({message: e.target.value}, this.handleSubmit);
+// }
+
+function handleCreate (){
     axios.post(`http://localhost:4000/api/contacts`, 
-        {"status":"govno"},
+        {"status":status},
         { headers: {"Authorization" : `Bearer ${props.token}`}, })
-    const data = await axios.get(`http://localhost:4000/api/contacts/`, 
+    const data = axios.get(`http://localhost:4000/api/contacts/`, 
         { headers: {"Authorization" : `Bearer ${props.token}`} })
     setContacts(data)
 }
+function useInput({ type /*...*/ }) {
+    const [value, setValue] = useState("");
+    const input = <input value={value} onChange={e => setValue(e.target.value)} type={type} />;
+    return [value, input];
+  }
 
 console.log(contacts)
 
 return (
     <div className="container">
         <h2>Example component</h2>
-        <button onClick = {handleClick}>Get contacts</button>
+        <button onClick = {handleGetData}>Get contacts</button>
+
+        {setStatus} {status}
         
-        <button onClick = {handleCreate}>create contact</button>
+        <button onClick = {handleCreate}>Get contacts</button>
         <div>
             {
                 contacts.data?contacts.data.map(el => (
@@ -44,9 +57,7 @@ return (
                             <button onClick = {()=>handleDelete(el._id)}>delete contact</button>
                         </div>
                     </div>
-                    
-                ))
-                :null
+                )):null
             }
         </div>
     </div>
