@@ -6,14 +6,14 @@ const [contacts, setContacts] = useState('')
 const [status, setStatus] = useInput('')
 
 const handleGetData = async() => {
-    const api = `http://localhost:4000/api/contacts`
+    const api = `${window.env.SERVER_DOMAIN}/api/contacts`
     const data = await axios.get(api, { headers: {"Authorization" : `Bearer ${props.token}`} })
     setContacts(data)
 }
 const handleDelete = async(id) => {
-    axios.delete(`http://localhost:4000/api/contacts/${id}`, 
+    axios.delete(`${window.env.SERVER_DOMAIN}/api/contacts/${id}`, 
         { headers: {"Authorization" : `Bearer ${props.token}`} })
-    const data = await axios.get(`http://localhost:4000/api/contacts/`, 
+    const data = await axios.get(`${window.env.SERVER_DOMAIN}/api/contacts/`, 
         { headers: {"Authorization" : `Bearer ${props.token}`} })
     setContacts(data)
 }
@@ -24,10 +24,10 @@ const handleDelete = async(id) => {
 // }
 
 function handleCreate (){
-    axios.post(`http://localhost:4000/api/contacts`, 
+    axios.post(`${window.env.SERVER_DOMAIN}/api/contacts`, 
         {"status":status},
         { headers: {"Authorization" : `Bearer ${props.token}`}, })
-    const data = axios.get(`http://localhost:4000/api/contacts/`, 
+    const data = axios.get(`${window.env.SERVER_DOMAIN}/api/contacts/`, 
         { headers: {"Authorization" : `Bearer ${props.token}`} })
     setContacts(data)
 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import useToggle from './customHooks/useToggle'
 
 async function loginUser(credentials, isOn) {
- return fetch(`http://localhost:4000/api/${isOn?'auth':'users'}`, {
+ return fetch(`${window.env.SERVER_DOMAIN}/api/${isOn?'auth':'users'}`, {
     //  `{"name":"med100s","email":"aszxcdsd999@gmail.com","password":"32hoshfDSDFU"}`
     body: `{"name":"${credentials.username}",
             "email":"${credentials.email}",
