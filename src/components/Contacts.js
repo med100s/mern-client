@@ -46,7 +46,7 @@ return (
 
         {setStatus} {status}
         
-        <button onClick = {handleCreate}>Get contacts</button>
+        <button onClick = {handleCreate}>create contact(after you will need to reload)</button>
         <div>
             {
                 contacts.data?contacts.data.map(el => (
