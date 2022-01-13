@@ -1,66 +1,55 @@
 import React, { useState } from "react"
 import axios from 'axios'
 
+import useInput from "./customHooks/useInput"
+
 function Contacts(props){
-const [contacts, setContacts] = useState('')
-const [status, setStatus] = useInput('')
+    const [contacts, setContacts] = useState('')
+    const [status, setStatus] = useInput('')
 
-const handleGetData = async() => {
     const api = `${window.env.SERVER_DOMAIN}/api/contacts`
-    const data = await axios.get(api, { headers: {"Authorization" : `Bearer ${props.token}`} })
-    setContacts(data)
-}
-const handleDelete = async(id) => {
-    axios.delete(`${window.env.SERVER_DOMAIN}/api/contacts/${id}`, 
-        { headers: {"Authorization" : `Bearer ${props.token}`} })
-    const data = await axios.get(`${window.env.SERVER_DOMAIN}/api/contacts/`, 
-        { headers: {"Authorization" : `Bearer ${props.token}`} })
-    setContacts(data)
-}
+    const authorizationHeader = {"Authorization" : `Bearer ${props.token}`}
 
-// let handleChange = function(e) {
-//     console.log(e.target.value);
-//     this.setState({message: e.target.value}, this.handleSubmit);
-// }
+    const getData = async() =>{
+        const data = await axios.get(api,{ headers: authorizationHeader })
+        setContacts(data)
+    }
 
-function handleCreate (){
-    axios.post(`${window.env.SERVER_DOMAIN}/api/contacts`, 
-        {"status":status},
-        { headers: {"Authorization" : `Bearer ${props.token}`}, })
-    const data = axios.get(`${window.env.SERVER_DOMAIN}/api/contacts/`, 
-        { headers: {"Authorization" : `Bearer ${props.token}`} })
-    setContacts(data)
-}
-function useInput({ type /*...*/ }) {
-    const [value, setValue] = useState("");
-    const input = <input value={value} onChange={e => setValue(e.target.value)} type={type} />;
-    return [value, input];
-  }
+    window.addEventListener('load', getData());
 
-console.log(contacts)
+    const handleDelete = async(id) => {
+        axios.delete(api+'/'+id, { headers: authorizationHeader })
+        getData()
+    }
 
-return (
-    <div className="container">
-        <h2>Example component</h2>
-        <button onClick = {handleGetData}>Get contacts</button>
+    function handleCreate (){
+        axios.post(api, {"status":status}, { headers: authorizationHeader })
+        getData()
+    }
 
-        {setStatus} {status}
-        
-        <button onClick = {handleCreate}>create contact(after you will need to reload)</button>
-        <div>
-            {
-                contacts.data?contacts.data.map(el => (
-                    <div>
+    console.log(contacts)
+
+    return (
+        <div className="container">
+            <h2>Example component</h2>
+            <button onClick = {getData}>Get contacts</button>
+
+            {setStatus}
+            
+            <button onClick = {handleCreate}>create contact</button>
+            <div>
+                {
+                    contacts.data?contacts.data.map(el => (
                         <div>
-                            {el.status} 
-                            {el._id} 
-                            <button onClick = {()=>handleDelete(el._id)}>delete contact</button>
+                            <div>
+                                {el.status} id in mongodb: {el._id} 
+                                <button onClick = {()=>handleDelete(el._id)}>delete contact</button>
+                            </div>
                         </div>
-                    </div>
-                )):null
-            }
+                    )):null
+                }
+            </div>
         </div>
-    </div>
-);
+    );
 }
 export default Contacts

@@ -5,35 +5,23 @@ import useToggle from './customHooks/useToggle'
 
 async function loginUser(credentials, isOn) {
  return fetch(`${window.env.SERVER_DOMAIN}/api/${isOn?'auth':'users'}`, {
-    //  `{"name":"med100s","email":"aszxcdsd999@gmail.com","password":"32hoshfDSDFU"}`
-    body: `{"name":"${credentials.username}",
-            "email":"${credentials.email}",
-            "password":"${credentials.password}"}`,
-    headers: {
-      "Content-Type": "application/json"
-    },
+    body: JSON.stringify(credentials),
+    headers: {"Content-Type": "application/json" },
     method: "POST"
  })
-   .then(data => data.json())
+    .then(data => data.json())
 }
 
 
-export default function Login({ setToken }) {
-  const [username, setUserName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+export default function Login({ setToken }) { 
+  
+  const [credentials, setCredentials] = useState();
   
   const [isOn, toggleIsOn] = useToggle();
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const token = await loginUser({
-      username,
-      email,
-      password
-    },
-      isOn  
-    );
+    const token = await loginUser(credentials, isOn);
     setToken(token);
   }
 
@@ -43,16 +31,22 @@ export default function Login({ setToken }) {
       <form onSubmit={handleSubmit}>
         <label>
             <p>name</p>
-            <input type="text" id="username" onChange={e => setUserName(e.target.value)} />
+            <input type="text" id="name" 
+              onChange={e => setCredentials(prev=>({...prev, "name": e.target.value}))} 
+            />
         </label>
         <label>
             <p>email</p>
-            <input type="text" id="email" onChange={e => setEmail(e.target.value)} />
+            <input type="text" id="email" 
+              onChange={e => setCredentials(prev=>({...prev, "email": e.target.value}))} 
+            />
         </label>
         <label>
             <p>password</p>
-            <input type="password" id="password" onChange={e => setPassword(e.target.value)} />
-        </label>
+            <input type="password" id="password" 
+              onChange={e => setCredentials(prev=>({...prev, "password": e.target.value}))} 
+            />
+            </label>
         <div>
             <button type="submit">Submit</button>
             
