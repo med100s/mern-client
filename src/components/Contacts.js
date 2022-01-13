@@ -31,8 +31,7 @@ function Contacts(props){
 
     return (
         <div className="container">
-            <h2>Example component</h2>
-            <button onClick = {getData}>Get contacts</button>
+            <h2>Contacts pages</h2>
 
             {setStatus}
             
